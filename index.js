@@ -1,14 +1,15 @@
-const express = require('express')
-const app = express()
-const port = 3000
+require('dotenv').config();
+const app = require('./src/app');
+const serverless = require('serverless-http');
 
-app.use(express.json());
-require('./src/models');
+const port = process.env.PORT || 3000;
+
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Servidor listo en http://localhost:${port}`);
+  });
+}
 
 
-require('./src/routes/routes')(app);
-app.listen(port, () => {
-  console.log(`Proyecto escuchando en el puerto ${port}`)
-})
 
-
+module.exports.handler = serverless(app);
